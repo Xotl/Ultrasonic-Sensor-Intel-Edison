@@ -1,0 +1,15 @@
+{
+  "name": "Ultrasonic-inteface",
+  "version": "0.1",
+  "description": "Interfacing an ultrasonic sensor with the Intel Edison",
+  "author": "Edgardo Campos (Xotl) <edgardo333@gmail.com>",
+  "main": "main.js",
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/Xotl/Ultrasonic-Sensor-Intel-Edison"
+},
+  "dependencies": {
+    "mraa": "^0.7.5"
+  },
+  "license": "MIT"
+}

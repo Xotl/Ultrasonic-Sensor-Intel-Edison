@@ -1,5 +1,5 @@
 var mraa = require('mraa');// Lib mraa: https://github.com/intel-iot-devkit/mraa/blob/master/docs/edison.md
-console.log('MRAA Version: ' + m.getVersion());// Write the mraa version to the console
+console.log('MRAA Version: ' + mraa.getVersion());// Write the mraa version to the console
 
 
 /* Constant value use for calculate the distance.
