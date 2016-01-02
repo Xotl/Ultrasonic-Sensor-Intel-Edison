@@ -1,4 +1,4 @@
-var m = require('mraa');// Lib mraa: https://github.com/intel-iot-devkit/mraa/blob/master/docs/edison.md
+var mraa = require('mraa');// Lib mraa: https://github.com/intel-iot-devkit/mraa/blob/master/docs/edison.md
 console.log('MRAA Version: ' + m.getVersion());// Write the mraa version to the console
 
 
@@ -16,13 +16,13 @@ console.log('MRAA Version: ' + m.getVersion());// Write the mraa version to the 
 var ULTRASONIC_SPREADING_VELOCITY_IN_AIR = 0.0003435;// milimeters per nanoseconds
 
 
-var EchoPin = new m.Gpio(15);// pin J18-2
-var TriggerPin = new m.Gpio(14);// pin J18-1
+var echoPin    = new mraa.Gpio(15),// pin J18-2
+    triggerPin = new mraa.Gpio(14);// pin J18-1
 
-EchoPin.dir(m.DIR_IN);// sets the gpio direction to input
-TriggerPin.dir(m.DIR_OUT);// sets the gpio direction to output
+echoPin.dir(mraa.DIR_IN);// sets the gpio direction to input
+triggerPin.dir(mraa.DIR_OUT);// sets the gpio direction to output
 
-TriggerPin.write(0);// Make sure the output is LOW
+triggerPin.write(0);// Make sure the output is LOW
 
 
 
@@ -33,10 +33,10 @@ var calculateDistanceFromTime = function(time) {
 var GetDistance = function() {
     
     var promise = new Promise(function(resolve, reject) {
-        TriggerPin.write(0);// Sends the 'start' signal to the ultrasonic sensor
-        while (EchoPin.read() === 0);// Waits until first HIGH is read
+        triggerPin.write(0);// Sends the 'start' signal to the ultrasonic sensor
+        while (echoPin.read() === 0);// Waits until first HIGH is read
         var time = process.hrtime();// Initial time
-        while (EchoPin.read() === 1);// Waits until LOW is read
+        while (echoPin.read() === 1);// Waits until LOW is read
         var diff = process.hrtime(time);// Gets the time elapsed
                 
         time = diff[0] * 1e9 + diff[1];// Converts the object into nanoseconds
