@@ -41,6 +41,7 @@ var GetDistance = function() {
         while (tenMicroSecondsFlag) {
             var diff = process.hrtime(time);// Gets the time elapsed
             diff = diff[0] * 1e9 + diff[1];// Converts the object into nanoseconds
+            console.log("Still waiting for 10 microseconds...");
             if (diff >= INITIATE_SIGNAL_TIME) {
                 triggerPin.write(0);// Resets the trigger pin
                 tenMicroSecondsFlag = false;
@@ -70,7 +71,7 @@ var task = function() {
     GetDistance()
     .then(function(result) {
         console.log("Distance is " + result.distance + "mm [" + result.time + "ns]");// Prints the current distance
-        setTimeout(task, 100);
+        setTimeout(task, 500);
     })
     .catch(function(error) {console.log(error)});// Let's print the error if any
 };
