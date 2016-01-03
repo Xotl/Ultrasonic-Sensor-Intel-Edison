@@ -33,7 +33,10 @@ var calculateDistanceFromTime = function(time) {
 var GetDistance = function() {
     
     var promise = new Promise(function(resolve, reject) {
-        triggerPin.write(0);// Sends the 'start' signal to the ultrasonic sensor
+        triggerPin.write(1);// Sends the 'start' signal to the ultrasonic sensor
+        setTimeout(function() {
+            triggerPin.write(0);// Resets the trigger pin 
+        }, 1);
         while (echoPin.read() === 0);// Waits until first HIGH is read
         var time = process.hrtime();// Initial time
         while (echoPin.read() === 1);// Waits until LOW is read
