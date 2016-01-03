@@ -38,21 +38,42 @@ var GetDistance = function() {
             triggerPin.write(0);// Resets the trigger pin 
         }, 1);
         while (echoPin.read() === 0);// Waits until first HIGH is read
-        var time = process.hrtime();// Initial time
+        var time = process.hrtime();// Initial echo time
         while (echoPin.read() === 1);// Waits until LOW is read
         var diff = process.hrtime(time);// Gets the time elapsed
                 
         time = diff[0] * 1e9 + diff[1];// Converts the object into nanoseconds
-        resolve( calculateDistanceFromTime(time) );
+        resolve({
+            time: time,
+            distance: calculateDistanceFromTime(time)
+        });
     });
     
     return promise;
 };
 
-setInterval(function() {
+
+var task = function() {
     GetDistance()
-    .then(function(distance) {
-        console.log("Distance is " + distance + "mm");// Prints the current distance
+    .then(function(result) {
+        console.log("Distance is " + result.distance + "mm [" + result.time + "ns]");// Prints the current distance
+        setTimeout(task, 100);
     })
     .catch(function(error) {console.log(error)});// Let's print the error if any
-}, 100);
+};
+
+
+function exitHandler(cleanup, err) {
+    if (cleanup) {
+        triggerPin.write(0);// Make sure the output is LOW
+    }
+    if (err) console.log(err.stack);
+}
+
+process.on('exit', exitHandler.bind(null, true));
+process.on('SIGINT', exitHandler.bind(null, true));
+process.on('uncaughtException', exitHandler.bind(null));
+
+
+console.log("Started!");
+task();
