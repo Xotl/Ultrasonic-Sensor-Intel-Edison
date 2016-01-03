@@ -15,7 +15,7 @@ console.log('MRAA Version: ' + mraa.getVersion());// Write the mraa version to t
  */
 var ULTRASONIC_SPREADING_VELOCITY_IN_AIR = 0.0003435;// milimeters per nanoseconds
 
-var INITIATE_SIGNAL_TIME = 10000; 
+var INITIATE_SIGNAL_TIME = 10000/*ns*/, TIME_FOR_NO_OBJECT_PRESENT = 38000000/*ns*/; 
 
 var echoPin    = new mraa.Gpio(15),// pin J18-2
     triggerPin = new mraa.Gpio(14);// pin J18-1
@@ -28,6 +28,7 @@ triggerPin.write(0);// Make sure the output is LOW
 
 
 var calculateDistanceFromTime = function(time) {
+    if (time >= TIME_FOR_NO_OBJECT_PRESENT) return -1;
     return time / 2 * ULTRASONIC_SPREADING_VELOCITY_IN_AIR;
 };
 
@@ -41,7 +42,6 @@ var GetDistance = function() {
         while (tenMicroSecondsFlag) {
             var diff = process.hrtime(time);// Gets the time elapsed
             diff = diff[0] * 1e9 + diff[1];// Converts the object into nanoseconds
-            console.log("Still waiting for 10 microseconds...");
             if (diff >= INITIATE_SIGNAL_TIME) {
                 triggerPin.write(0);// Resets the trigger pin
                 tenMicroSecondsFlag = false;
