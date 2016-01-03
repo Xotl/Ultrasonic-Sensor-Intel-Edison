@@ -82,6 +82,7 @@ function exitHandler(cleanup, err) {
         console.log("Cleaned up!");
     }
     if (err) console.log(err.stack);
+    process.exit();
 }
 
 process.on('exit', exitHandler.bind(null, true));
