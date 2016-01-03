@@ -50,11 +50,9 @@ var GetDistance = function() {
         
         
         while (echoPin.read() === 0) {};// Waits until first HIGH is read
-        console.log("HIGH read: " + echoPin.read());
         time = process.hrtime();// Initial echo time
         while (echoPin.read() === 1);// Waits until LOW is read
         var diff = process.hrtime(time);// Gets the time elapsed
-        console.log("LOW read: " + echoPin.read());
                 
         time = diff[0] * 1e9 + diff[1];// Converts the object into nanoseconds
         resolve({
