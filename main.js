@@ -47,7 +47,7 @@ var GetDistance = function() {
 };
 
 setInterval(function() {
-    GetDistance
+    GetDistance()
     .then(function(distance) {
         console.log("Distance is " + distance + "mm");// Prints the current distance
     })
