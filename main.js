@@ -15,6 +15,7 @@ console.log('MRAA Version: ' + mraa.getVersion());// Write the mraa version to t
  */
 var ULTRASONIC_SPREADING_VELOCITY_IN_AIR = 0.0003435;// milimeters per nanoseconds
 
+var INITIATE_SIGNAL_TIME = 10000; 
 
 var echoPin    = new mraa.Gpio(15),// pin J18-2
     triggerPin = new mraa.Gpio(14);// pin J18-1
@@ -34,13 +35,25 @@ var GetDistance = function() {
     
     var promise = new Promise(function(resolve, reject) {
         triggerPin.write(1);// Sends the 'start' signal to the ultrasonic sensor
-        setTimeout(function() {
-            triggerPin.write(0);// Resets the trigger pin 
-        }, 1);
-        while (echoPin.read() === 0);// Waits until first HIGH is read
-        var time = process.hrtime();// Initial echo time
+        
+        var time = process.hrtime();// Initial time
+        var tenMicroSecondsFlag = true;
+        while (tenMicroSecondsFlag) {
+            var diff = process.hrtime(time);// Gets the time elapsed
+            diff = diff[0] * 1e9 + diff[1];// Converts the object into nanoseconds
+            if (diff >= INITIATE_SIGNAL_TIME) {
+                triggerPin.write(0);// Resets the trigger pin
+                tenMicroSecondsFlag = false;
+            }
+        }
+        
+        
+        while (echoPin.read() === 0) {};// Waits until first HIGH is read
+        console.log("HIGH read: " + echoPin.read());
+        time = process.hrtime();// Initial echo time
         while (echoPin.read() === 1);// Waits until LOW is read
         var diff = process.hrtime(time);// Gets the time elapsed
+        console.log("LOW read: " + echoPin.read());
                 
         time = diff[0] * 1e9 + diff[1];// Converts the object into nanoseconds
         resolve({
