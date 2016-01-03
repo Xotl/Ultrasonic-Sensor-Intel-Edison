@@ -66,6 +66,7 @@ var task = function() {
 function exitHandler(cleanup, err) {
     if (cleanup) {
         triggerPin.write(0);// Make sure the output is LOW
+        Console.log("Cleaned up!");
     }
     if (err) console.log(err.stack);
 }
