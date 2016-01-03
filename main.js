@@ -66,6 +66,7 @@ var GetDistance = function() {
 
 
 var task = function() {
+    console.log("New cycle...");
     GetDistance()
     .then(function(result) {
         console.log("Distance is " + result.distance + "mm [" + result.time + "ns]");// Prints the current distance
